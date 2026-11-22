@@ -1,0 +1,3 @@
+-- Q: What is the total monthly player salary across recorded dates?
+
+-- A: Let's query MyFC.dbo.tblPlayerFact and sum mtd_salary by as_of_date...

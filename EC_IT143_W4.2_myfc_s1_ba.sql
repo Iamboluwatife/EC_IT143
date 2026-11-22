@@ -1,0 +1,1 @@
+-- Q: What is the total monthly player salary across recorded dates?
