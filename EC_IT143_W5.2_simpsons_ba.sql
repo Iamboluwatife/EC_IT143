@@ -65,17 +65,23 @@ SELECT vc.Member_Name
  ORDER BY vc.Member_Name
         , vc.Date;
 
--- Q4: [Paste Peer Simpsons Question from 4.3 Collaboration Corner Here]
--- Author: [Paste Classmate's Full Name Here]
--- A4: Aggregate spending by department and member across Family_Data and Planet_Express.
+-- Q4: Which employee spent the most money?
+-- Author: Beni-serge TIABATANTOU BOUBOTE
+-- A4: Join Family_Data with FBS_Viza_Costmo and Planet_Express on member/cardholder name to total spending per employee.
 
-SELECT fd.Department
+SELECT fd.Member_ID
      , fd.Name
-     , SUM(pe.Amount) AS total_spending
+     , fd.Department
+     , COALESCE(SUM(vc.Debit), 0) AS total_viza_debit
+     , COALESCE(SUM(pe.Amount), 0) AS total_planet_express_amount
+     , COALESCE(SUM(vc.Debit), 0) + COALESCE(SUM(pe.Amount), 0) AS total_spent
   FROM Simpsons.dbo.Family_Data AS fd
- INNER JOIN Simpsons.dbo.Planet_Express AS pe
+  LEFT JOIN Simpsons.dbo.FBS_Viza_Costmo AS vc
+    ON fd.Name = vc.Member_Name
+  LEFT JOIN Simpsons.dbo.Planet_Express AS pe
     ON fd.Name = pe.Card_Member
- GROUP BY fd.Department
+ GROUP BY fd.Member_ID
         , fd.Name
- ORDER BY total_spending DESC
+        , fd.Department
+ ORDER BY total_spent DESC
         , fd.Name;
